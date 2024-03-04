@@ -92,7 +92,7 @@ sudo rm $snapclient_deb
 
 ### swaps the snapclient build that I fixed the white noise in
 echo "Swapping out the snapclient build that fixes the white noise problem"
-wget https://github.com/chaosoflife/ultrahouse/blob/main/snapclient_rhasspy_satalite/snapclient_armhf
+wget https://github.com/chaosoflife/ultrahouse/blob/main/snapclient_rhasspy_satellite/snapclient_armhf
 sudo mv snapclient_armhf /usr/local/bin/snapclient
 
 ### Setup Rhasspy
