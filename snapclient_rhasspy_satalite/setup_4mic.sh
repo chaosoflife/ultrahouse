@@ -74,7 +74,7 @@ enable_I2S_overlay() {
 ###   Main Block   ###
 ######################
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y python3-full python3-pip dkms git avahi-utils mosquitto-clients portaudio19-dev libasound2-plugins alsa-utils libatlas-base-dev libfftw3-dev libconfig-dev libasound2-dev libgconf-2-4 cmake
+sudo apt-get install -y python3-full python3-pip dkms git avahi-utils mosquitto-clients portaudio19-dev libasound2 libasound2-plugins alsa-utils libatlas-base-dev libflac-dev libsoxr-dev libogg-dev libopus-dev libvorbis-dev expat libfftw3-dev libconfig-dev libasound2-dev libgconf-2-4 cmake
 
 cd $base_url
 
@@ -100,6 +100,11 @@ echo "Setting up Snapclient ($snapclient_deb)..."
 wget https://github.com/badaix/snapcast/releases/download/v0.27.0/$snapclient_deb
 sudo apt-get install -y ./$snapclient_deb
 sudo rm $snapclient_deb
+
+### swaps the snapclient build that I fixed the white noise in
+echo "Swapping out the snapclient build that fixes the white noise problem"
+wget https://github.com/chaosoflife/ultrahouse/blob/main/snapclient_rhasspy_satalite/snapclient_armhf
+sudo mv snapclient_armhf /usr/local/bin/snapclient
 
 ### Setup Rhasspy
 echo "Setting up Rhasspy..."
