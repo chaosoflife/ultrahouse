@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    user: 1000:1011
+    environment:
+      UID: 1000
+      GID: 1011
+      MARIADB_ROOT_PASSWORD: XXXXXXXXXXXXXXXXXXXXXXXX
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /apps/docker/mariadb/data/:/var/lib/mysql/
+      - /apps/docker/mariadb/mysql/:/etc/mysql/
+    ports:
+      - 33060:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    environment:
+      UID: 1000
+      GID: 1011
+    ports:
+      - 8085:8080

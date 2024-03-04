@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  duckdns:
+    container_name: duckdns
+    working_dir: /apps/docker/duckdns
+    image: lscr.io/linuxserver/duckdns:latest
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+      - SUBDOMAINS=XXXXXXXXXXXXXXX
+      - TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      - LOG_FILE=false #optional
+    volumes:
+      - /apps/docker/duckdns:/config
+    restart: unless-stopped

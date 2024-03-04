@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8080:80/tcp"
+    environment:
+      - TZ=America/New_York
+      - PIHOLE_UID=1884
+      - PIHOLE_GID=1011
+      - WEBPASSWORD=tS1PtP1Pihole
+    volumes:
+      - '/apps/docker/pihole:/etc/pihole'
+      - '/apps/docker/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+    restart: unless-stopped

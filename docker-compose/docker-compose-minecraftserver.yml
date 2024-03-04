@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  atm8:
+    image: itzg/minecraft-server
+    working_dir: /apps/docker/minecraft
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "true"
+      MOD_PLATFORM: AUTO_CURSEFORGE
+      # allocate from https://console.curseforge.com/ and set in .env file
+      CF_API_KEY: ${CF_API_KEY}
+      CF_PAGE_URL: https://www.curseforge.com/minecraft/modpacks/all-the-mods-8
+      CF_FILENAME_MATCHER: "1.1.0"
+      MEMORY: 12G
+      TZ: "America/New_York"
+    volumes:
+      - /apps/docker/minecraft/atm8-data:/data
+    restart: unless-stopped
+volumes:
+  atm8-data: {}

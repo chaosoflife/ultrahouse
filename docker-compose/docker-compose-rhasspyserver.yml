@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  rhasspy:
+    image: "klabacha/rhasspy:amd64"
+    container_name: rhasspy
+    restart: unless-stopped
+    user: 1000:1011
+    volumes:
+        - "/apps/docker/rhasspy/profiles:/profiles"
+        - "/etc/localtime:/etc/localtime:ro"
+    ports:
+        - "12101:12101"
+    devices:
+        - "/dev/snd:/dev/snd"
+    command: --user-profiles /profiles --profile en

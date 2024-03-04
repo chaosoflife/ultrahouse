@@ -1,0 +1,43 @@
+---
+version: "3.8"
+services:
+  plex:
+    container_name: plex
+    working_dir: /apps/docker/plex
+    image: lscr.io/linuxserver/plex:latest
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+      - VERSION=latest
+      - PLEX_CLAIM=XXXXXXXXXXXXXXXXXXX
+    volumes:
+      - /home/media/.plex_data/config:/config
+      - /home/media:/data
+    restart: unless-stopped
+  tautulli:
+    container_name: tautulli
+    image: ghcr.io/tautulli/tautulli
+    volumes:
+      - /apps/docker/tautulli:/config
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+  overseerr:
+    container_name: overseerr
+    image: sctx/overseerr:latest
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - LOG_LEVEL=debug
+      - TZ=America/New_York
+    ports:
+      - 5055:5055
+    volumes:
+      - /apps/docker/overseerr:/app/config
+    restart: unless-stopped

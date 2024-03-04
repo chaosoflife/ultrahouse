@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  snapserver:
+    container_name: snapserver
+    image: klabacha/snapserver:amd64
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /apps/docker/snapserver/snapserver.conf:/etc/snapserver.conf
+      - /apps/docker/snapserver/snapfifo:/tmp/snapfifo
+    environment:
+      UID: "1000"
+      GID: "1011"
+    ports:
+      - "1704:1704" # TCP acceptor port
+      - "1705:1705" # stream acceptor port
+      - "1780:1780" # HTTP acceptor port 
+    restart: unless-stopped

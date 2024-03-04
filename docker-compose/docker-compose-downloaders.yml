@@ -1,0 +1,48 @@
+---
+version: "3.8"
+services:
+  sabnzbd:
+    container_name: sabnzbd
+    image: lscr.io/linuxserver/sabnzbd:latest
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+    volumes:
+      - /apps/docker/sabnzbd:/config
+      - /home:/data
+    ports:
+      - 8011:8080
+      - 9090:9090
+    restart: unless-stopped
+
+  transmission:
+    container_name: transmission
+    image: haugene/transmission-openvpn
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /apps/docker/transmission/:/config
+      - /home:/data
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+      - OPENVPN_PROVIDER=PRIVADO
+      - TRANSMISSION_WEB_UI=transmission-web-control
+      - OPENVPN_USERNAME=XXXXXXXXXXXXXX
+      - OPENVPN_PASSWORD=XXXXXXXXXXXXX
+      - LOCAL_NETWORK=192.168.0.0/16
+      - TRANSMISSION_DOWNLOAD_DIR=/data/purg-media/completed
+      - TRANSMISSION_INCOMPLETE_DIR=/data/purg-media/incomplete
+      - TRANSMISSION_WATCH_DIR=/data/purg-media/watch
+      - OPENVPN_CONFIG=dca-007
+      - TRANSMISSION_RPC_PASSWORD=XXXXXXXXXXXX
+      - TRANSMISSION_RPC_USERNAME=XXXXXXXXXXXX
+    logging:
+      driver: json-file
+      options:
+          max-size: 10m
+    ports:
+       - '9091:9091'
+    restart: unless-stopped

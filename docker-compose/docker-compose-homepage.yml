@@ -1,0 +1,14 @@
+---
+version: "3.8"
+services:
+  homepage:
+    container_name: homepage
+    image: ghcr.io/gethomepage/homepage:latest
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - /apps/docker/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 3000:3000
+    restart: unless-stopped
