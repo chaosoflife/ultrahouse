@@ -18,10 +18,10 @@ host_id="XXX.XXX.XX.XXX"
 base_url="/home/blueberry/"
 
 # mqtt variables
-broker_address = "XXX.XXX.XX.XXX"
-broker_port = XXXX
-username = "XXXXXXXXXXXX"
-password = "XXXXXXXXXXXX"
+broker_address="XXX.XXX.XX.XXX"
+broker_port=XXXX
+username="XXXXXXXXXXXX"
+password="XXXXXXXXXXXX"
 
 rhasspy_deb="rhasspy_armel.deb"
 seeed_git="HinTak/seeed-voicecard.git"
