@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    working_dir: /apps/docker/portainer
+    ports:
+      - 9443:9443
+    volumes:
+      - /apps/docker/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+volumes:
+  data:
