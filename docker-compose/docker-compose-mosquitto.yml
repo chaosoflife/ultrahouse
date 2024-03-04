@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    hostname: mosquitto 
+    environment:
+      - PUID=1000
+      - PGID=1011
+      - TZ=America/New_York
+    ports:
+      - "1884:1883"
+      - "9001:9001"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /apps/docker/mosquitto:/etc/mosquitto
+      - /apps/docker/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /apps/docker/mosquitto/passwordfile.txt:/mosquitto/passwordfile.txt
+    restart: unless-stopped
