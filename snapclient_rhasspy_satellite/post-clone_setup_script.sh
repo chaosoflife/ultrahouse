@@ -62,7 +62,7 @@ update_rhasspy_config() {
         sudo sed -i 's/"site_id": "[^"]*"/"site_id": "'"\$hostname"'"/' "\$rhasspy_config"
         log_message "Updated Rhasspy configuration with new site_id: \$new_hostname"
     else
-        log_message "Rhasspy configuration file not found!!!!!!"
+        log_message "WARNING: Rhasspy configuration file not found"
     fi
 }
 # Function to set the hostname
@@ -73,28 +73,30 @@ set_hostname() {
     sudo sed -i "s/127\.0\.1\.1.*/127\.0\.1\.1\t\$hostname/g" /etc/hosts
     log_message "changing computer hostname to \$hostname"
     sudo hostnamectl set-hostname \$hostname
-    sleep 1
+    sleep 3
     log_message "hostname changed to \$hostname in /etc/hosts and /etc/hotsname"
 }
 # Function to restart interfaces
 restart_interfaces() {
-    log_message "Restarting the network interfaces using interface: wlan0"
-    sudo systemctl restart dhcpcd
-    sleep 5
+    log_message "Restarting the network interfaces using interface"
+    sudo systemctl restart networking
     log_message "Flushing IP addresses from the interface and renewing DHCP lease"
     sudo ip addr flush dev wlan0
     sudo dhclient -r wlan0
     sudo dhclient wlan0
+    log_message "Restarting the dhcpcd service"
+    sleep 5
     sudo systemctl restart dhcpcd
+    log_message "Restarting the avahi-daemon service"
+    sleep 5
     sudo systemctl restart avahi-daemon
+    sleep 5
+    log_message "Interface has been restarted"
 }
-log_message "Running raspi-config --expand-rootfs to adjust the system size"
-log_message "-------------------------------------------------------------"
-sudo raspi-config --expand-rootfs
+
 log_message "Starting hostname_change"
 log_message "-------------------------------------------------------------"
 new_hostname=\$(next_hostname)
-sleep 1
 log_message "New hostname determined: \$new_hostname"
 update_rhasspy_config \$new_hostname
 set_hostname \$new_hostname
@@ -105,10 +107,8 @@ if [[ -f "${base_url}/docker-compose.yml" ]]; then
     log_message "starting up docker-compose"
     sudo docker-compose up -d
 else
-    log_message "No docker-compose.yml found, skipping container startup"
+    log_message "WARNING: No docker-compose.yml found, skipping container startup"
 fi
-
-sleep 1
 log_message "-------------------------------------------------------------"
 log_message "All files modified: The computer is now called \$new_hostname"
 log_message "-------------------------------------------------------------"
@@ -134,19 +134,15 @@ log_message "Running the cleanup script..."
 log_message "-------------------------------------------------------------"
 log_message "Disabling the first_boot service..."
 sudo systemctl disable first_boot.service
-sleep 1
+sleep 3
 log_message "Removing the first_boot service systemd file..."
 sudo rm /etc/systemd/system/first_boot.service
-sleep 1
+sleep 3
 log_message "Reloading the daemon..."
 sudo systemctl daemon-reload
-sleep 1
-log_message "Resetting the failed services to completely remove the first boot service..."
-sudo systemctl reset-failed
-sleep 1
+sleep 5
 log_message "Post-clone cleanup script completed"
-log_message "The system will reboot in 1 seconds."
-sleep 1
+log_message "The system will reboot."
 sudo reboot
 EOF
 
@@ -164,6 +160,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/bin/sleep 60
 ExecStart=/bin/bash /etc/hostname_change.sh
 ExecStopPost=/bin/bash /etc/cleanup.sh
 
